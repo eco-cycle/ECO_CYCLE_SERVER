@@ -22,18 +22,17 @@ spring:
         dialect: org.hibernate.dialect.MySQLDialect
     open-in-view: false
 
-  #  cloud:
-  #    aws:
-  #      s3:
-  #        bucket: ${spring.cloud.aws.s3.bucket}
-  #      credentials:
-  #        accessKey: ${spring.cloud.aws.credentials.accessKey}
-  #        secretKey: ${spring.cloud.aws.credentials.secretKey}
-  #      region:
-  #        static: ${spring.cloud.aws.region.static}
-  #      stack:
-  #        auto: ${spring.cloud.aws.stack.auto}
-  #      baseUrl: ${spring.cloud.aws.baseUrl}
+  cloud:
+    aws:
+      s3:
+        bucket: ${spring.cloud.aws.s3.bucket}
+      credentials:
+        accessKey: ${spring.cloud.aws.credentials.accessKey}
+        secretKey: ${spring.cloud.aws.credentials.secretKey}
+      region:
+        static: ${spring.cloud.aws.region.static}
+      stack:
+        auto: ${spring.cloud.aws.stack.auto}
 
   #  이미지 용량 제한
   servlet:

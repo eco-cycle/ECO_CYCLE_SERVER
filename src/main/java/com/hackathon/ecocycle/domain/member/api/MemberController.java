@@ -6,6 +6,7 @@ import com.hackathon.ecocycle.domain.member.dto.response.MemberInfoResponseDto;
 import com.hackathon.ecocycle.domain.member.dto.response.NewMemberResponseDto;
 import com.hackathon.ecocycle.domain.member.exception.MemberNotFoundException;
 import com.hackathon.ecocycle.global.exception.dto.ErrorResponse;
+import com.hackathon.ecocycle.global.image.exception.ImageNotFoundException;
 import com.hackathon.ecocycle.global.template.ResponseTemplate;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -16,6 +17,9 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.io.IOException;
 
 
 @RestController
@@ -53,5 +57,16 @@ public class MemberController {
     public ResponseTemplate<?> updateMemberInfo(@AuthenticationPrincipal String email, @RequestBody InfoRequestDto infoRequestDto) throws MemberNotFoundException {
         memberService.updateInfoMember(email, infoRequestDto);
         return new ResponseTemplate<>(HttpStatus.OK, "회원정보 수정 성공");
+    }
+
+    @Operation(summary = "프로필 이미지 수정", description = "프로필 이미지 수정")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "프로필 이미지 수정 성공"),
+            @ApiResponse(responseCode = "401", description = "인증 실패", content = @Content(schema = @Schema(implementation = ErrorResponse.class)))
+    })
+    @PutMapping("/image")
+    public ResponseTemplate<?> updateProfileImage(@AuthenticationPrincipal String email, @RequestPart(value = "image") MultipartFile image) throws MemberNotFoundException, IOException, ImageNotFoundException {
+        memberService.updateProfileImage(email, image);
+        return new ResponseTemplate<>(HttpStatus.OK, "프로필 이미지 수정 성공");
     }
 }

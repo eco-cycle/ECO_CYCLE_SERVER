@@ -48,4 +48,8 @@ public class Member {
     public void updateInfo(String location) {
         this.location = location;
     }
+
+    public void updateProfileImage(String imageUrl) {
+        this.imageUrl = imageUrl;
+    }
 }

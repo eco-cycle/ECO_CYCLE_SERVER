@@ -3,6 +3,7 @@ package com.hackathon.ecocycle.global.exception;
 import com.hackathon.ecocycle.domain.member.exception.MemberNotFoundException;
 import com.hackathon.ecocycle.global.exception.dto.ErrorCode;
 import com.hackathon.ecocycle.global.exception.dto.ErrorResponse;
+import com.hackathon.ecocycle.global.image.exception.ImageNotFoundException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
@@ -34,14 +35,22 @@ public class ControllerAdvice {
                 .status(e.getErrorCode().getStatus().value())
                 .body(new ErrorResponse(e.getErrorCode()));
     }
+
+    @ExceptionHandler(ImageNotFoundException.class)
+    protected ResponseEntity<ErrorResponse> imageNotFoundException(final MemberNotFoundException e) {
+        log.error("ImageNotFoundException: {}", e.getErrorCode());
+        return ResponseEntity
+                .status(e.getErrorCode().getStatus().value())
+                .body(new ErrorResponse(e.getErrorCode()));
+    }
     /*
      * HTTP 500 Exception
      */
-    @ExceptionHandler(Exception.class)
-    protected ResponseEntity<ErrorResponse> handleException(final Exception e) {
-        log.error("handleException: {}", e.getMessage());
-        return ResponseEntity
-                .status(ErrorCode.INTERNAL_SERVER_ERROR.getStatus().value())
-                .body(new ErrorResponse(ErrorCode.INTERNAL_SERVER_ERROR));
-    }
+//    @ExceptionHandler(Exception.class)
+//    protected ResponseEntity<ErrorResponse> handleException(final Exception e) {
+//        log.error("handleException: {}", e.getMessage());
+//        return ResponseEntity
+//                .status(ErrorCode.INTERNAL_SERVER_ERROR.getStatus().value())
+//                .body(new ErrorResponse(ErrorCode.INTERNAL_SERVER_ERROR));
+//    }
 }
