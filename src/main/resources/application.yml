@@ -1,0 +1,80 @@
+spring:
+  profiles:
+    active: prod
+    include: auth
+
+  main:
+    allow-bean-definition-overriding: true
+
+  datasource:
+    url: ${spring.datasource.url}
+    username: ${spring.datasource.username}
+    password: ${spring.datasource.password}
+    driver-class-name: ${spring.datasource.driver-class-name}
+
+  jpa:
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        show_sql: true
+        format_sql: true
+        dialect: org.hibernate.dialect.MySQLDialect
+    open-in-view: false
+
+  #  cloud:
+  #    aws:
+  #      s3:
+  #        bucket: ${spring.cloud.aws.s3.bucket}
+  #      credentials:
+  #        accessKey: ${spring.cloud.aws.credentials.accessKey}
+  #        secretKey: ${spring.cloud.aws.credentials.secretKey}
+  #      region:
+  #        static: ${spring.cloud.aws.region.static}
+  #      stack:
+  #        auto: ${spring.cloud.aws.stack.auto}
+  #      baseUrl: ${spring.cloud.aws.baseUrl}
+
+  #  이미지 용량 제한
+  servlet:
+    multipart:
+      maxFileSize: 10MB
+      maxRequestSize: 60MB
+
+  jwt:
+    secretKey: ${spring.jwt.secretKey}
+    access:
+      expiration: ${spring.jwt.access.expiration}
+      header: ${spring.jwt.access.header}
+    refresh:
+      expiration: ${spring.jwt.refresh.expiration}
+      header: ${spring.jwt.refresh.header}
+
+logging:
+  level:
+    org:
+      hibernate:
+        sql: debug
+        type: trace
+      springframework:
+        data:
+          mongodb:
+            core:
+              MongoTemplate: DEBUG
+
+springdoc:
+  packages-to-scan: com.hackathon.ecocycle
+  default-consumes-media-type: application/json;charset=UTF-8
+  default-produces-media-type: application/json;charset=UTF-8
+  swagger-ui:
+    tags-sorter: method
+    operations-sorter: alpha
+  api-docs:
+    path: /api-docs/json
+    groups:
+      enabled: true
+  cache:
+    disabled: true
+
+my-app:
+  api-url: ${my-app.api-url}
