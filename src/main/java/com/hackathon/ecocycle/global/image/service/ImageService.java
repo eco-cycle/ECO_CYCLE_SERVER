@@ -32,14 +32,23 @@ public class ImageService {
     private static final String S3_BASE_URL_FORMAT = "https://%s.s3.ap-northeast-2.amazonaws.com/";
 
     // 단일 이미지 업로드
-    public String uploadImage(MultipartFile file) throws IOException, ImageNotFoundException {
-        validateFile(file);
+    public String uploadImage(MultipartFile file) throws IOException {
+        log.info("Validating file: {}", file.getOriginalFilename());
+
+        if (!validateFile(file)) {
+            log.info("Image validation failed for file: {}", file.getOriginalFilename());
+            return null;
+        }
+
         String fileName = generateFileName(file);
+        log.info("Generated file name: {}", fileName);
+
         String imageUrl = uploadToS3(file, fileName);
         saveImage(imageUrl);
-
+        log.info("Image uploaded: {}", imageUrl);
         return imageUrl;
     }
+
 
     // 다중 이미지 업로드
     public List<String> uploadImages(MultipartFile[] files) throws IOException, ImageNotFoundException {
@@ -76,16 +85,14 @@ public class ImageService {
     }
 
     private String generateFileName(MultipartFile file) {
-        return UUID.randomUUID().toString() + "-" + file.getOriginalFilename();
+        return UUID.randomUUID() + "-" + file.getOriginalFilename();
     }
 
     private String extractFileNameFromUrl(String imageUrl) {
         return imageUrl.substring(imageUrl.lastIndexOf("/") + 1);
     }
 
-    private void validateFile(MultipartFile file) throws ImageNotFoundException {
-        if (file == null || file.isEmpty()) {
-            throw new ImageNotFoundException(ErrorCode.IMAGE_NOT_FOUND);
-        }
+    private boolean validateFile(MultipartFile file) {
+        return file != null && !file.isEmpty();
     }
 }

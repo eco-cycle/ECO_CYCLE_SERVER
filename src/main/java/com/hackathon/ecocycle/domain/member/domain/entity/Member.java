@@ -35,9 +35,6 @@ public class Member {
     @Column(name = "location")
     private String location;
 
-    @Column(name = "phone_number")
-    private String phoneNumber;
-
     @Column(name = "social_type")
     @Enumerated(EnumType.STRING)
     private SocialType socialType;
@@ -45,11 +42,12 @@ public class Member {
     @OneToOne(mappedBy = "member", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private Token token;
 
-    public void updateInfo(String location) {
+    public void updateLocation(String location) {
         this.location = location;
     }
 
-    public void updateProfileImage(String imageUrl) {
+    public void updateProfileInfo(String imageUrl, String nickname) {
         this.imageUrl = imageUrl;
+        this.nickname = nickname;
     }
 }

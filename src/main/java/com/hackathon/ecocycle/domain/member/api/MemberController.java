@@ -2,6 +2,7 @@ package com.hackathon.ecocycle.domain.member.api;
 
 import com.hackathon.ecocycle.domain.member.application.MemberService;
 import com.hackathon.ecocycle.domain.member.dto.request.InfoRequestDto;
+import com.hackathon.ecocycle.domain.member.dto.request.LocationRequestDto;
 import com.hackathon.ecocycle.domain.member.dto.response.MemberInfoResponseDto;
 import com.hackathon.ecocycle.domain.member.dto.response.NewMemberResponseDto;
 import com.hackathon.ecocycle.domain.member.exception.MemberNotFoundException;
@@ -48,25 +49,25 @@ public class MemberController {
         return new ResponseTemplate<>(HttpStatus.OK, "회원정보 조회 성공",memberService.getMemberInfo(email));
     }
 
-    @Operation(summary = "회원정보 수정", description = "회원정보 수정")
+    @Operation(summary = "회원 주소 수정", description = "회원 주소 수정")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "회원정보 수정 성공"),
+            @ApiResponse(responseCode = "200", description = "회원 주소 수정 성공"),
+            @ApiResponse(responseCode = "401", description = "인증 실패", content = @Content(schema = @Schema(implementation = ErrorResponse.class)))
+    })
+    @PutMapping("/location")
+    public ResponseTemplate<?> updateMemberInfo(@AuthenticationPrincipal String email, @RequestBody LocationRequestDto locationRequestDto) throws MemberNotFoundException {
+        memberService.updateLocation(email, locationRequestDto);
+        return new ResponseTemplate<>(HttpStatus.OK, "회원 주소 수정 성공");
+    }
+
+    @Operation(summary = "프로필 수정", description = "프로필 수정")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "프로필 수정 성공"),
             @ApiResponse(responseCode = "401", description = "인증 실패", content = @Content(schema = @Schema(implementation = ErrorResponse.class)))
     })
     @PutMapping("/info")
-    public ResponseTemplate<?> updateMemberInfo(@AuthenticationPrincipal String email, @RequestBody InfoRequestDto infoRequestDto) throws MemberNotFoundException {
-        memberService.updateInfoMember(email, infoRequestDto);
-        return new ResponseTemplate<>(HttpStatus.OK, "회원정보 수정 성공");
-    }
-
-    @Operation(summary = "프로필 이미지 수정", description = "프로필 이미지 수정")
-    @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "프로필 이미지 수정 성공"),
-            @ApiResponse(responseCode = "401", description = "인증 실패", content = @Content(schema = @Schema(implementation = ErrorResponse.class)))
-    })
-    @PutMapping("/image")
-    public ResponseTemplate<?> updateProfileImage(@AuthenticationPrincipal String email, @RequestPart(value = "image") MultipartFile image) throws MemberNotFoundException, IOException, ImageNotFoundException {
-        memberService.updateProfileImage(email, image);
-        return new ResponseTemplate<>(HttpStatus.OK, "프로필 이미지 수정 성공");
+    public ResponseTemplate<?> updateProfileImage(@AuthenticationPrincipal String email, InfoRequestDto infoRequestDto) throws MemberNotFoundException, IOException, ImageNotFoundException {
+        memberService.updateInfo(email, infoRequestDto);
+        return new ResponseTemplate<>(HttpStatus.OK, "프로필 수정 성공");
     }
 }
