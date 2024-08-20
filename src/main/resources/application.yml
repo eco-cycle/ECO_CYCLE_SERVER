@@ -77,3 +77,7 @@ springdoc:
 
 my-app:
   api-url: ${my-app.api-url}
+
+external:
+  api:
+    url: ${external.api.url}
