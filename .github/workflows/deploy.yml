@@ -53,7 +53,7 @@ jobs:
 
       # Docker 이미지 빌드
       - name: docker image build
-        run: docker build -t ${{ secrets.DOCKERHUB_USERNAME }}/kagu .
+        run: docker build -t ${{ secrets.DOCKERHUB_USERNAME }}/eco .
 
       # DockerHub 로그인 (이미지 푸시를 위해)
       - name: docker login
@@ -64,7 +64,7 @@ jobs:
 
       # DockerHub로 이미지 푸시
       - name: Docker Hub push
-        run: docker push ${{ secrets.DOCKERHUB_USERNAME }}/kagu
+        run: docker push ${{ secrets.DOCKERHUB_USERNAME }}/eco
 
   # 위 과정에서 푸시한 이미지를 EC2에서 받아서 실행
   run-docker-image-on-ec2:
@@ -74,13 +74,13 @@ jobs:
     steps:
       # DockerHub에서 이미지 pull
       - name: docker pull
-        run : sudo docker pull ${{ secrets.DOCKERHUB_USERNAME }}/kagu
+        run : sudo docker pull ${{ secrets.DOCKERHUB_USERNAME }}/eco
 
       # 기존에 실행 중인 컨테이너 중지
       - name: docker stop container
         run: |
-          if [ $(sudo docker ps -a -q -f name=kagu) ]; then
-            sudo docker stop kagu
+          if [ $(sudo docker ps -a -q -f name=eco) ]; then
+            sudo docker stop eco
           fi
 
       # 오래된 Docker 이미지 삭제
@@ -89,4 +89,4 @@ jobs:
 
       # 새 컨테이너 실행
       - name: docker run new container
-        run: sudo docker run --rm -it -d -p 5000:5000 --name kagu ${{ secrets.DOCKERHUB_USERNAME }}/kagu
+        run: sudo docker run --rm -it -d -p 8092:8092 --name eco ${{ secrets.DOCKERHUB_USERNAME }}/eco
