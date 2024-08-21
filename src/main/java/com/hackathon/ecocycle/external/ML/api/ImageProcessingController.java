@@ -1,6 +1,6 @@
-package com.hackathon.ecocycle.external.lambda.api;
+package com.hackathon.ecocycle.external.ML.api;
 
-import com.hackathon.ecocycle.external.lambda.application.ImageProcessingService;
+import com.hackathon.ecocycle.external.ML.application.ImageProcessingService;
 import com.hackathon.ecocycle.global.template.ResponseTemplate;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.*;

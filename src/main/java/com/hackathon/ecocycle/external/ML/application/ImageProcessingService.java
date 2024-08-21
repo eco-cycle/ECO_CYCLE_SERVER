@@ -1,6 +1,6 @@
-package com.hackathon.ecocycle.external.lambda.application;
+package com.hackathon.ecocycle.external.ML.application;
 
-import com.hackathon.ecocycle.external.lambda.dto.PredictedResponseDto;
+import com.hackathon.ecocycle.external.ML.dto.PredictedResponseDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;

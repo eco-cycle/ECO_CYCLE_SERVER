@@ -1,4 +1,4 @@
-package com.hackathon.ecocycle.external.lambda.dto;
+package com.hackathon.ecocycle.external.ML.dto;
 
 import lombok.Builder;
 
