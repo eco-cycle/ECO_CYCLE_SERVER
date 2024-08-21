@@ -32,11 +32,11 @@ jobs:
         shell: bash
 
       # application-oauth.yml 파일 생성 및 내용 추가
-      - name: Make application-oauth.yml
+      - name: Make application-auth.yml
         run: |
           cd ./src/main/resources
-          touch application-oauth.yml
-          echo "${{ secrets.PROPERTIES_OAUTH }}" > application-oauth.yml
+          touch application-auth.yml
+          echo "${{ secrets.PROPERTIES_OAUTH }}" > application-auth.yml
         shell: bash
 
       # Gradle 설정
