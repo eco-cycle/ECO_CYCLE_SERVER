@@ -2,7 +2,6 @@ package com.hackathon.ecocycle.domain.shoppingcart.api;
 
 import com.hackathon.ecocycle.domain.member.exception.MemberNotFoundException;
 import com.hackathon.ecocycle.domain.shoppingcart.application.CartService;
-import com.hackathon.ecocycle.domain.shoppingcart.dto.request.CartProductRequestDto;
 import com.hackathon.ecocycle.domain.shoppingcart.dto.request.PurchaseRequestDto;
 import com.hackathon.ecocycle.domain.shoppingcart.dto.response.CartProductResponseDto;
 import com.hackathon.ecocycle.domain.shoppingcart.dto.response.PurchaseResponseDto;
@@ -42,9 +41,9 @@ public class CartController {
             @ApiResponse(responseCode = "200", description = "장바구니에 제품 추가 성공", content = @Content(schema = @Schema(implementation = CartProductResponseDto.class))),
             @ApiResponse(responseCode = "400", description = "잘못된 요청", content = @Content(schema = @Schema(implementation = ErrorResponse.class)))
     })
-    @PostMapping("/cart")
-    public ResponseTemplate<CartProductResponseDto> addCartItem(@AuthenticationPrincipal String email, @RequestBody CartProductRequestDto cartProductRequestDto) throws MemberNotFoundException {
-        return new ResponseTemplate<>(HttpStatus.CREATED, "장바구니에 제품 추가 성공", cartService.addCartItem(email, cartProductRequestDto.getProductId(), cartProductRequestDto.getCount()));
+    @PostMapping("/cart/{productId}")
+    public ResponseTemplate<CartProductResponseDto> addCartItem(@AuthenticationPrincipal String email, @PathVariable Long productId) throws MemberNotFoundException {
+        return new ResponseTemplate<>(HttpStatus.CREATED, "장바구니에 제품 추가 성공", cartService.addCartItem(email, productId));
     }
 
     @Operation(summary = "장바구니 수량 증가", description = "장바구니에 담긴 제품의 수량 증가")

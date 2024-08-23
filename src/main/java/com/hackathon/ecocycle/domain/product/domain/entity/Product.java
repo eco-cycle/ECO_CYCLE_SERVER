@@ -32,4 +32,8 @@ public class Product {
 
     @Column(name = "description_image_url")
     private String descriptionImageUrl;
+
+    public void addTitleImageUrl(String imageUrl) {
+        this.titleImageUrl = imageUrl;
+    }
 }

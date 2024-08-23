@@ -7,9 +7,10 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.List;
 
 @RestController
@@ -22,5 +23,12 @@ public class ProductController {
     @GetMapping("/product/all")
     public ResponseTemplate<List<ProductResponseDto>> getAllProducts() {
         return new ResponseTemplate<>(HttpStatus.OK, "제품 목록 조회 성공", productService.getAllProducts());
+    }
+
+    @Operation(summary = "상품 이미지 등록")
+    @PostMapping("/product/image/{productId}")
+    public ResponseTemplate<?> productAddImage(@PathVariable Long productId, @RequestParam("file") MultipartFile file) throws IOException {
+        productService.productAddImage(productId, file);
+        return new ResponseTemplate<>(HttpStatus.OK, "상품 사진 추가");
     }
 }

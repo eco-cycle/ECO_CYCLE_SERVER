@@ -51,7 +51,7 @@ public class CartService {
     }
 
     @Transactional
-    public CartProductResponseDto addCartItem(String email, Long productId, int count) throws MemberNotFoundException {
+    public CartProductResponseDto addCartItem(String email, Long productId) throws MemberNotFoundException {
         Member member = globalUtil.findByMemberWithEmail(email);
 
         Cart cart = cartRepository.findByMemberId(member);
@@ -68,8 +68,6 @@ public class CartService {
         CartItem cartItem = cartItemRepository.findByCartIdAndProductId(cart, product).orElseGet(
                 () -> createNewCart(cart, product)
         );
-
-        cartItem.addCartItemCount(count);
 
         return CartProductResponseDto.builder()
                 .productId(cartItem.getProductId().getId())
@@ -112,10 +110,10 @@ public class CartService {
         Product product = productRepository.findById(productId).orElseThrow(() -> new RuntimeException("상품 정보가 없습니다."));
         CartItem cartItem = cartItemRepository.findByCartIdAndProductId(cart, product).orElseThrow(() -> new RuntimeException("장바구니에 해당 제품이 없습니다."));;
 
-        if (cartItem.getCartItemCount() == 1) {
-            cartItemRepository.delete(cartItem);
-        } else {
+        if (cartItem.getCartItemCount() > 1) {
             cartItem.addCartItemCount(-1);
+        } else {
+            throw new RuntimeException("최소 수량은 1 입니다.");
         }
 
         return cartItem.getCartItemCount();
