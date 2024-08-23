@@ -1,4 +1,4 @@
-package com.hackathon.ecocycle.domain.recycling.domain.entity;
+package com.hackathon.ecocycle.domain.recycling_method.domain.entity;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;

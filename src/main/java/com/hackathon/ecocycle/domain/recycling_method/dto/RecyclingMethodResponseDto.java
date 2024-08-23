@@ -1,4 +1,4 @@
-package com.hackathon.ecocycle.domain.recycling.dto;
+package com.hackathon.ecocycle.domain.recycling_method.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

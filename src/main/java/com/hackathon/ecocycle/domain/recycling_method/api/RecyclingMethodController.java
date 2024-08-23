@@ -1,7 +1,7 @@
-package com.hackathon.ecocycle.domain.recycling.api;
+package com.hackathon.ecocycle.domain.recycling_method.api;
 
-import com.hackathon.ecocycle.domain.recycling.application.RecyclingMethodService;
-import com.hackathon.ecocycle.domain.recycling.dto.RecyclingMethodResponseDto;
+import com.hackathon.ecocycle.domain.recycling_method.application.RecyclingMethodService;
+import com.hackathon.ecocycle.domain.recycling_method.dto.RecyclingMethodResponseDto;
 import com.hackathon.ecocycle.global.image.exception.ImageNotFoundException;
 import com.hackathon.ecocycle.global.template.ResponseTemplate;
 import io.swagger.v3.oas.annotations.tags.Tag;

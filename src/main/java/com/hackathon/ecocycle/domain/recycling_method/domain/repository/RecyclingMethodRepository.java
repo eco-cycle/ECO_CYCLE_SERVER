@@ -1,6 +1,6 @@
-package com.hackathon.ecocycle.domain.recycling.domain.repository;
+package com.hackathon.ecocycle.domain.recycling_method.domain.repository;
 
-import com.hackathon.ecocycle.domain.recycling.domain.entity.RecyclingMethod;
+import com.hackathon.ecocycle.domain.recycling_method.domain.entity.RecyclingMethod;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Optional;

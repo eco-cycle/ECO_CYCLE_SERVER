@@ -1,8 +1,8 @@
-package com.hackathon.ecocycle.domain.recycling.application;
+package com.hackathon.ecocycle.domain.recycling_method.application;
 
-import com.hackathon.ecocycle.domain.recycling.domain.entity.RecyclingMethod;
-import com.hackathon.ecocycle.domain.recycling.domain.repository.RecyclingMethodRepository;
-import com.hackathon.ecocycle.domain.recycling.dto.RecyclingMethodResponseDto;
+import com.hackathon.ecocycle.domain.recycling_method.domain.entity.RecyclingMethod;
+import com.hackathon.ecocycle.domain.recycling_method.domain.repository.RecyclingMethodRepository;
+import com.hackathon.ecocycle.domain.recycling_method.dto.RecyclingMethodResponseDto;
 import com.hackathon.ecocycle.global.image.exception.ImageNotFoundException;
 import com.hackathon.ecocycle.global.image.service.ImageService;
 import lombok.RequiredArgsConstructor;
