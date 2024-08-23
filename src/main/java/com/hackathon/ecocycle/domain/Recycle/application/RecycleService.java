@@ -17,6 +17,8 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Slf4j
 @Service
@@ -25,6 +27,7 @@ public class RecycleService {
     private final RecycleRepository recycleRepository;
     private final ImageService imageService;
     private final GlobalUtil globalUtil;
+
     public void createRecycle(String email, MultipartFile image, RecycleRequestDto recycleRequestDto) throws MemberNotFoundException, IOException {
         Member member = globalUtil.findByMemberWithEmail(email);
 
@@ -41,7 +44,7 @@ public class RecycleService {
 
     @Transactional(readOnly = true)
     public RecycleResponseDto getRecycle(Long id) throws RecycleNotFoundException, MemberNotFoundException {
-        Recycle recycle = recycleRepository.findById(id).orElseThrow(()-> new RecycleNotFoundException(ErrorCode.RECYCLE_NOT_FOUND));
+        Recycle recycle = recycleRepository.findById(id).orElseThrow(() -> new RecycleNotFoundException(ErrorCode.RECYCLE_NOT_FOUND));
         Member member = globalUtil.findByMemberWithEmail(recycle.getMember().getEmail());
 
         return RecycleResponseDto.builder()
@@ -52,5 +55,40 @@ public class RecycleService {
                 .nickname(member.getNickname())
                 .location(member.getLocation())
                 .build();
+    }
+
+    @Transactional(readOnly = true)
+    public List<RecycleResponseDto> getAllRecycleSale(String email) throws MemberNotFoundException {
+        Member member = globalUtil.findByMemberWithEmail(email);
+
+        List<Recycle> recycleList = recycleRepository.findAll();
+
+        return recycleList.stream().filter(
+                recycle -> recycle.getMember().equals(member)
+        ).map(
+                recycle -> RecycleResponseDto.from(recycle, member)
+        ).collect(Collectors.toList());
+    }
+
+    @Transactional(readOnly = true)
+    public List<RecycleResponseDto> getAllRecyclePurchase(String email) throws MemberNotFoundException {
+        Member member = globalUtil.findByMemberWithEmail(email);
+
+        List<Recycle> recycleList = recycleRepository.findAll();
+
+        return recycleList.stream().filter(
+                recycle -> !recycle.getMember().equals(member)
+        ).map(
+                recycle -> {
+                    try {
+                        Recycle recycleEntity = recycleRepository.findById(recycle.getRecycleId()).orElseThrow(() -> new RecycleNotFoundException(ErrorCode.RECYCLE_NOT_FOUND));
+                        Member recycleOwner = recycleEntity.getMember();
+
+                        return RecycleResponseDto.from(recycle, recycleOwner);
+                    } catch (RecycleNotFoundException e) {
+                        throw new RuntimeException(e);
+                    }
+                }
+        ).collect(Collectors.toList());
     }
 }

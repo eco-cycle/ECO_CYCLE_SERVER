@@ -1,6 +1,5 @@
 package com.hackathon.ecocycle.domain.member.domain.entity;
 
-import com.hackathon.ecocycle.domain.Recycle.domain.entity.Recycle;
 import com.hackathon.ecocycle.global.jwt.domain.entity.Token;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
