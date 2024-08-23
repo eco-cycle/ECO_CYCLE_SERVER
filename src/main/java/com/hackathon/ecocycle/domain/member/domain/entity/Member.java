@@ -4,6 +4,7 @@ import com.hackathon.ecocycle.global.jwt.domain.entity.Token;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import lombok.*;
+import org.hibernate.annotations.ColumnDefault;
 
 
 @Entity
@@ -39,6 +40,10 @@ public class Member {
     @Enumerated(EnumType.STRING)
     private SocialType socialType;
 
+    @Column(name = "point")
+    @ColumnDefault("0")
+    private int point;
+
     @OneToOne(mappedBy = "member", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private Token token;
 
@@ -49,5 +54,9 @@ public class Member {
     public void updateProfileInfo(String imageUrl, String nickname) {
         this.imageUrl = imageUrl;
         this.nickname = nickname;
+    }
+
+    public void calPoint(int totalPrice) {
+        this.point -= totalPrice;
     }
 }
