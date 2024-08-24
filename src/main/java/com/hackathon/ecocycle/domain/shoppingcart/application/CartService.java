@@ -45,7 +45,8 @@ public class CartService {
                         cartItem.getProductId().getCategory(),
                         cartItem.getProductId().getSeller(),
                         cartItem.getProductId().getPrice(),
-                        cartItem.getCartItemCount()
+                        cartItem.getCartItemCount(),
+                        cartItem.getProductId().getTitleImageUrl()
                 ))
                 .collect(Collectors.toList());
     }
@@ -76,6 +77,7 @@ public class CartService {
                 .seller(cartItem.getProductId().getSeller())
                 .price(cartItem.getProductId().getPrice())
                 .count(cartItem.getCartItemCount())
+                .imageUrl(cartItem.getProductId().getTitleImageUrl())
                 .build();
     }
 
@@ -165,6 +167,7 @@ public class CartService {
                             .seller(cartItem.getProductId().getSeller())
                             .price(cartItem.getProductId().getPrice())
                             .count(cartItem.getCartItemCount())
+                            .imageUrl(cartItem.getProductId().getTitleImageUrl())
                             .build()
             );
         }
