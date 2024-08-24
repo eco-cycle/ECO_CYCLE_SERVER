@@ -15,10 +15,12 @@ import com.hackathon.ecocycle.global.oauth.common.OAuthLoginParams;
 import com.hackathon.ecocycle.global.oauth.exception.OAuthException;
 import com.hackathon.ecocycle.global.oauth.service.RequestOAuthInfoService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class AuthService {
@@ -72,9 +74,7 @@ public class AuthService {
 
     @Transactional
     public TokenDto generateAccessToken(ReIssueRequestDto reIssueRequestDto) throws MemberNotFoundException, InvalidTokenException {
-        validateRefreshToken(reIssueRequestDto.getRefreshToken());
-
-        Token token = tokenRepository.findByRefreshToken(reIssueRequestDto.getRefreshToken());
+        Token token = validateRefreshToken(reIssueRequestDto);
 
         Member member = memberRepository.findById(token.getMember().getMemberId())
                 .orElseThrow(() -> new MemberNotFoundException(ErrorCode.MEMBER_NOT_FOUND));
@@ -82,10 +82,12 @@ public class AuthService {
         return createNewAccessToken(member, token.getRefreshToken());
     }
 
-    private void validateRefreshToken(String refreshToken) throws InvalidTokenException {
-        if (tokenRepository.findByRefreshToken(refreshToken) == null || !jwtTokenProvider.validateToken(refreshToken)) {
+    private Token validateRefreshToken(ReIssueRequestDto reIssueRequestDto) throws InvalidTokenException {
+        Token token = tokenRepository.findByRefreshToken(reIssueRequestDto.getRefreshToken());
+        if (token.getRefreshToken() == null) {
             throw new InvalidTokenException(ErrorCode.TOKEN_EXPIRED);
         }
+        return token;
     }
 
     private TokenDto createNewAccessToken(Member member, String refreshToken) {
