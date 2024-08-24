@@ -17,6 +17,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -34,11 +35,15 @@ public class RecycleService {
         String imageUrl = imageService.uploadImage(image);
 
         Recycle recycle = Recycle.builder()
+                .title(recycleRequestDto.title())
+                .location(recycleRequestDto.location())
                 .member(member)
-                .type(recycleRequestDto.type())
+                .type(false)
                 .price(recycleRequestDto.price())
+                .createdAt(LocalDateTime.now())
                 .imageUrl(imageUrl)
                 .build();
+
         recycleRepository.save(recycle);
     }
 
@@ -49,8 +54,10 @@ public class RecycleService {
 
         return RecycleResponseDto.builder()
                 .id(recycle.getRecycleId())
+                .title(recycle.getTitle())
+                .location(recycle.getLocation())
                 .price(recycle.getPrice())
-                .type(recycle.getType())
+                .createdAt(recycle.getCreatedAt())
                 .imageUrl(recycle.getImageUrl())
                 .nickname(member.getNickname())
                 .location(member.getLocation())
@@ -64,7 +71,7 @@ public class RecycleService {
         List<Recycle> recycleList = recycleRepository.findAll();
 
         return recycleList.stream().filter(
-                recycle -> recycle.getMember().equals(member)
+                recycle -> recycle.getMember().equals(member) && !recycle.getType()
         ).map(
                 recycle -> RecycleResponseDto.from(recycle, member)
         ).collect(Collectors.toList());
@@ -77,7 +84,7 @@ public class RecycleService {
         List<Recycle> recycleList = recycleRepository.findAll();
 
         return recycleList.stream().filter(
-                recycle -> !recycle.getMember().equals(member)
+                recycle -> !recycle.getMember().equals(member) && !recycle.getType()
         ).map(
                 recycle -> {
                     try {

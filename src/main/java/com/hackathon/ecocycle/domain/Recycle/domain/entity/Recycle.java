@@ -4,6 +4,8 @@ import com.hackathon.ecocycle.domain.member.domain.entity.Member;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.time.LocalDateTime;
+
 @Entity
 @Getter
 @Builder
@@ -16,9 +18,15 @@ public class Recycle {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long recycleId;
 
+    private String title;
+
+    private String location;
+
     private Long price;
 
-    private String type;
+    private LocalDateTime createdAt;
+
+    private Boolean type;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id")

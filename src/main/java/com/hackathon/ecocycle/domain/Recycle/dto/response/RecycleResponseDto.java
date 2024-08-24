@@ -4,19 +4,24 @@ import com.hackathon.ecocycle.domain.Recycle.domain.entity.Recycle;
 import com.hackathon.ecocycle.domain.member.domain.entity.Member;
 import lombok.Builder;
 
+import java.time.LocalDateTime;
+
 @Builder
 public record RecycleResponseDto(
         Long id,
+        String title,
+        String location,
         Long price,
-        String type,
+        LocalDateTime createdAt,
         String imageUrl,
-        String nickname,
-        String location) {
+        String nickname) {
     public static RecycleResponseDto from(Recycle recycle, Member member) {
         return RecycleResponseDto.builder()
                 .id(recycle.getRecycleId())
+                .title(recycle.getTitle())
+                .location(recycle.getLocation())
                 .price(recycle.getPrice())
-                .type(recycle.getType())
+                .createdAt(recycle.getCreatedAt())
                 .imageUrl(recycle.getImageUrl())
                 .nickname(member.getNickname())
                 .location(member.getLocation())
