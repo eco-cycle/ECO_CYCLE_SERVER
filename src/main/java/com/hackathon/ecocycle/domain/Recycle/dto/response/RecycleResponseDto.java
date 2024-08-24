@@ -14,7 +14,9 @@ public record RecycleResponseDto(
         Long price,
         LocalDateTime createdAt,
         String imageUrl,
-        String nickname) {
+        String nickname,
+        String userImage
+) {
     public static RecycleResponseDto from(Recycle recycle, Member member) {
         return RecycleResponseDto.builder()
                 .id(recycle.getRecycleId())
@@ -24,6 +26,7 @@ public record RecycleResponseDto(
                 .createdAt(recycle.getCreatedAt())
                 .imageUrl(recycle.getImageUrl())
                 .nickname(member.getNickname())
+                .imageUrl(member.getImageUrl())
                 .location(member.getLocation())
                 .build();
     }

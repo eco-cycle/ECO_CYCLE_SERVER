@@ -52,16 +52,7 @@ public class RecycleService {
         Recycle recycle = recycleRepository.findById(id).orElseThrow(() -> new RecycleNotFoundException(ErrorCode.RECYCLE_NOT_FOUND));
         Member member = globalUtil.findByMemberWithEmail(recycle.getMember().getEmail());
 
-        return RecycleResponseDto.builder()
-                .id(recycle.getRecycleId())
-                .title(recycle.getTitle())
-                .location(recycle.getLocation())
-                .price(recycle.getPrice())
-                .createdAt(recycle.getCreatedAt())
-                .imageUrl(recycle.getImageUrl())
-                .nickname(member.getNickname())
-                .location(member.getLocation())
-                .build();
+        return RecycleResponseDto.from(recycle, member);
     }
 
     @Transactional(readOnly = true)
