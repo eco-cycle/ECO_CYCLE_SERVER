@@ -25,6 +25,11 @@ public class ProductController {
         return new ResponseTemplate<>(HttpStatus.OK, "제품 목록 조회 성공", productService.getAllProducts());
     }
 
+    @GetMapping("/product/{productId}")
+    public ResponseTemplate<ProductResponseDto> getProductById(@PathVariable Long productId) {
+        return new ResponseTemplate<>(HttpStatus.OK, "제품 단일 조회 성공", productService.getProductById(productId));
+    }
+
     @Operation(summary = "상품 이미지 등록")
     @PostMapping("/product/image/{productId}")
     public ResponseTemplate<?> productAddImage(@PathVariable Long productId, @RequestParam("file") MultipartFile file) throws IOException {

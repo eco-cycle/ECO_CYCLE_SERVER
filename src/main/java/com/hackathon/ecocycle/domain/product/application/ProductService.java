@@ -36,6 +36,21 @@ public class ProductService {
                 .build()).collect(Collectors.toList());
     }
 
+    @Transactional(readOnly = true)
+    public ProductResponseDto getProductById(Long id) {
+        Product product = productRepository.findById(id).orElseThrow(() -> new RuntimeException("제품이 존재하지 않습니다."));
+
+        return ProductResponseDto.builder()
+                .product_id(product.getId())
+                .name(product.getName())
+                .category(product.getCategory())
+                .seller(product.getSeller())
+                .price(product.getPrice())
+                .titleImageUrl(product.getTitleImageUrl())
+                .descriptionImageUrl(product.getDescriptionImageUrl())
+                .build();
+    }
+
     @Transactional
     public void productAddImage(Long productId, MultipartFile image) throws IOException {
         String newImageUrl = imageService.uploadImage(image);
