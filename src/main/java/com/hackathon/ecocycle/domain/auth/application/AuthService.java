@@ -30,6 +30,7 @@ public class AuthService {
     private final JwtTokenProvider jwtTokenProvider;
     private final RequestOAuthInfoService requestOAuthInfoService;
 
+    @Transactional
     public TokenDto login(OAuthLoginParams params) throws OAuthException, MemberNotFoundException {
         OAuthInfoResponse oAuthInfoResponse = requestOAuthInfoService.request(params);
         String email = findOrCreateMember(oAuthInfoResponse);
