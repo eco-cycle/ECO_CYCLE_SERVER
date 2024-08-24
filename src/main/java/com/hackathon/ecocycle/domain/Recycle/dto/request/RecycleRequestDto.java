@@ -1,8 +1,7 @@
 package com.hackathon.ecocycle.domain.Recycle.dto.request;
 
 public record RecycleRequestDto(
-        String title,
-        String location,
+        String type,
         Long price
 ) {
 }

@@ -22,10 +22,15 @@ public class RecycleController {
     private final RecycleService recycleService;
 
     @PostMapping("/create")
-    public ResponseTemplate<?> createRecycle(@AuthenticationPrincipal String email, @RequestPart(required = true, value = "image") MultipartFile image, @RequestPart(required = true, value = "recycleRequestDto") RecycleRequestDto recycleRequestDto) throws MemberNotFoundException, IOException {
+    public ResponseTemplate<?> createRecycle(
+            @AuthenticationPrincipal String email,
+            @RequestPart("image") MultipartFile image,
+            @RequestPart("recycleRequestDto") RecycleRequestDto recycleRequestDto) throws MemberNotFoundException, IOException {
+
         recycleService.createRecycle(email, image, recycleRequestDto);
         return new ResponseTemplate<>(HttpStatus.OK, "Recycle created");
     }
+
 
     @GetMapping("/item/{id}")
     public ResponseTemplate<?> getRecycle(@PathVariable Long id) throws RecycleNotFoundException, MemberNotFoundException {

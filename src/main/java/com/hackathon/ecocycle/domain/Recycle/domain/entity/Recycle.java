@@ -18,19 +18,17 @@ public class Recycle {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long recycleId;
 
-    private String title;
-
     private String location;
+
+    private String type;
 
     private Long price;
 
     private LocalDateTime createdAt;
 
-    private Boolean type;
+    private String imageUrl;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id")
     private Member member;
-
-    private String imageUrl;
 }

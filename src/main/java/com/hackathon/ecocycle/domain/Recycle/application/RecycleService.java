@@ -31,62 +31,54 @@ public class RecycleService {
 
     public void createRecycle(String email, MultipartFile image, RecycleRequestDto recycleRequestDto) throws MemberNotFoundException, IOException {
         Member member = globalUtil.findByMemberWithEmail(email);
-
         String imageUrl = imageService.uploadImage(image);
 
-        Recycle recycle = Recycle.builder()
-                .title(recycleRequestDto.title())
-                .location(recycleRequestDto.location())
-                .member(member)
-                .type(false)
-                .price(recycleRequestDto.price())
-                .createdAt(LocalDateTime.now())
-                .imageUrl(imageUrl)
-                .build();
+        Recycle recycle = buildRecycle(recycleRequestDto, member, imageUrl);
 
         recycleRepository.save(recycle);
     }
 
     @Transactional(readOnly = true)
-    public RecycleResponseDto getRecycle(Long id) throws RecycleNotFoundException, MemberNotFoundException {
-        Recycle recycle = recycleRepository.findById(id).orElseThrow(() -> new RecycleNotFoundException(ErrorCode.RECYCLE_NOT_FOUND));
-        Member member = globalUtil.findByMemberWithEmail(recycle.getMember().getEmail());
-
-        return RecycleResponseDto.from(recycle, member);
+    public RecycleResponseDto getRecycle(Long id) throws RecycleNotFoundException {
+        Recycle recycle = findRecycleById(id);
+        return RecycleResponseDto.from(recycle, recycle.getMember());
     }
 
     @Transactional(readOnly = true)
     public List<RecycleResponseDto> getAllRecycleSale(String email) throws MemberNotFoundException {
         Member member = globalUtil.findByMemberWithEmail(email);
+        List<Recycle> recycleList = recycleRepository.findAllByMember(member);
 
-        List<Recycle> recycleList = recycleRepository.findAll();
-
-        return recycleList.stream().filter(
-                recycle -> recycle.getMember().equals(member) && !recycle.getType()
-        ).map(
-                recycle -> RecycleResponseDto.from(recycle, member)
-        ).collect(Collectors.toList());
+        return toRecycleResponseDtoList(recycleList);
     }
 
     @Transactional(readOnly = true)
     public List<RecycleResponseDto> getAllRecyclePurchase(String email) throws MemberNotFoundException {
         Member member = globalUtil.findByMemberWithEmail(email);
+        List<Recycle> recycleList = recycleRepository.findAllByMemberNot(member);
 
-        List<Recycle> recycleList = recycleRepository.findAll();
+        return toRecycleResponseDtoList(recycleList);
+    }
 
-        return recycleList.stream().filter(
-                recycle -> !recycle.getMember().equals(member) && !recycle.getType()
-        ).map(
-                recycle -> {
-                    try {
-                        Recycle recycleEntity = recycleRepository.findById(recycle.getRecycleId()).orElseThrow(() -> new RecycleNotFoundException(ErrorCode.RECYCLE_NOT_FOUND));
-                        Member recycleOwner = recycleEntity.getMember();
+    private Recycle buildRecycle(RecycleRequestDto dto, Member member, String imageUrl) {
+        return Recycle.builder()
+                .location(member.getLocation())
+                .member(member)
+                .type(dto.type())
+                .price(dto.price())
+                .createdAt(LocalDateTime.now())
+                .imageUrl(imageUrl)
+                .build();
+    }
 
-                        return RecycleResponseDto.from(recycle, recycleOwner);
-                    } catch (RecycleNotFoundException e) {
-                        throw new RuntimeException(e);
-                    }
-                }
-        ).collect(Collectors.toList());
+    private Recycle findRecycleById(Long id) throws RecycleNotFoundException {
+        return recycleRepository.findById(id)
+                .orElseThrow(() -> new RecycleNotFoundException(ErrorCode.RECYCLE_NOT_FOUND));
+    }
+
+    private List<RecycleResponseDto> toRecycleResponseDtoList(List<Recycle> recycleList) {
+        return recycleList.stream()
+                .map(recycle -> RecycleResponseDto.from(recycle, recycle.getMember()))
+                .collect(Collectors.toList());
     }
 }
